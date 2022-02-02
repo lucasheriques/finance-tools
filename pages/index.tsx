@@ -1,8 +1,9 @@
 import { Title, Text, Anchor } from '@mantine/core';
+import Shell from 'components/AppShell';
 
 export default function HomePage() {
   return (
-    <>
+    <Shell>
       <Title sx={{ fontSize: 100, fontWeight: 900, letterSpacing: -2 }} align="center" mt={100}>
         Welcome to{' '}
         <Text inherit variant="gradient" component="span">
@@ -17,6 +18,6 @@ export default function HomePage() {
         </Anchor>
         . To get started edit index.tsx file.
       </Text>
-    </>
+    </Shell>
   );
 }

@@ -1,7 +1,10 @@
-import { Button, Container, NumberInput, SimpleGrid, Space, Table, Title } from '@mantine/core';
+import { Button, NumberInput, SimpleGrid, Space, Table, Title } from '@mantine/core';
 import { useForm } from '@mantine/hooks';
+import Shell from 'components/AppShell';
+import { formatCurrency } from 'lib/functions';
 import useCompoundInterest from 'lib/useCompoundInterest';
 import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
 
 interface InterestRateValuesForm {
@@ -13,6 +16,8 @@ interface InterestRateValuesForm {
 
 export default function CompoundInterestCalculator() {
   const { t } = useTranslation('compound-interest');
+  const { locale } = useRouter();
+  console.log('locale', locale);
   const [interestRateValues, setInterestRateValues] = useState<InterestRateValuesForm>({
     initial: 0,
     monthly: 0,
@@ -42,7 +47,7 @@ export default function CompoundInterestCalculator() {
   });
 
   return (
-    <Container>
+    <Shell>
       <Title>{t('title')}</Title>
       <Space h="md" />
       <form
@@ -95,7 +100,7 @@ export default function CompoundInterestCalculator() {
       </form>
       <Space h="lg" />
 
-      <Table striped highlightOnHover>
+      <Table striped>
         <thead>
           <tr>
             <td>Mês</td>
@@ -118,15 +123,17 @@ export default function CompoundInterestCalculator() {
               <td>{i + 1}</td>
               <td>R${value.toFixed(2)}</td>
               <td>R${interestRateResults.totalInvested[i]}</td>
-              <td>R${interestRateResults.monthlyAccumulatedInterest[i].toFixed(2)}</td>
               <td>
                 R$
-                {interestRateResults.totalAccumulated[i].toFixed(2)}
+                {interestRateResults.monthlyAccumulatedInterest[i].toLocaleString(undefined, {
+                  maximumFractionDigits: 2,
+                })}
               </td>
+              <td>{formatCurrency(interestRateResults.totalAccumulated[i])}</td>
             </tr>
           ))}
         </tbody>
       </Table>
-    </Container>
+    </Shell>
   );
 }
